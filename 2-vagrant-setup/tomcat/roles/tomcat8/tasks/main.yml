@@ -1,0 +1,54 @@
+---
+- name: Updating apt
+  become: True
+  become_method: sudo
+  apt:
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400
+
+- name: Install Java 1.8
+  apt: 
+    name: openjdk-8-jdk
+    state: latest
+
+
+- name: add group "tomcat"
+  group: name=tomcat
+
+- name: add user "tomcat"
+  user: name=tomcat group=tomcat home=/usr/share/tomcat createhome=no
+  become: True
+  become_method: sudo
+
+- name: Download Tomcat
+  get_url: url=http://archive.apache.org/dist/tomcat/tomcat-8/v8.5.8/bin/apache-tomcat-8.5.8.tar.gz dest=/opt/apache-tomcat-8.5.8.tar.gz
+
+- name: Extract archive
+  command: chdir=/usr/share /bin/tar xvf /opt/apache-tomcat-8.5.8.tar.gz -C /opt/ creates=/opt/apache-tomcat-8.5.8
+
+- name: Symlink install directory
+  file: src=/opt/apache-tomcat-8.5.8 path=/usr/share/tomcat state=link
+
+- name: Change ownership of Tomcat installation
+  file: path=/usr/share/tomcat/ owner=tomcat group=tomcat state=directory recurse=yes
+
+- name: Configure Tomcat server
+  template: src=server.xml dest=/usr/share/tomcat/conf/
+  notify: tomcat-8-restart
+
+- name: Configure Tomcat users
+  template: src=tomcat-users.xml dest=/usr/share/tomcat/conf/
+  notify: tomcat-8-restart
+
+- name: Install Tomcat init script
+  copy: src=tomcat-initscript.sh dest=/etc/init.d/tomcat mode=0755
+
+- name: systemd daemon-reload
+  shell: systemctl daemon-reload
+  notify: tomcat-8-restart
+
+- debug: msg="Http Port is {{http_port}}"
+
+- name: wait for tomcat to start
+  wait_for: port={{http_port}}

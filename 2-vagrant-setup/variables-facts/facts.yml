@@ -1,0 +1,14 @@
+---
+  - name: Facts Example
+    hosts: localhost
+    connection: local
+    gather_facts: True
+
+    tasks:
+      - name: Print the Facts variables        
+        debug: var=ansible_facts
+      
+
+     https://gitlab.com/ansible_tekmentors/ansible-training/tree/master/2-vagrant-setup/tomcat-role
+
+     https://gitlab.com/ansible_tekmentors/ansible-training.git

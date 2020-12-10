@@ -1,0 +1,8 @@
+---
+  - hosts: devserver
+
+    roles:
+      - tomcat-rollback
+      - jdk8-rollback
+      #- application-rollback
+      

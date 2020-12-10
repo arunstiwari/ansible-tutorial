@@ -1,0 +1,14 @@
+---
+  - name: Basic Variables Example
+    hosts: localhost
+    connection: local
+
+    vars_files:
+      - variables.yml
+
+    tasks: 
+      - name: Debugging Variables
+        debug: var=user
+
+      - name: Debugging Variables
+        debug: msg="Hostname is {{hostname}} and user is {{user}}"  

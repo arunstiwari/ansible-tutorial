@@ -1,0 +1,8 @@
+---
+  - hosts: devserver
+
+    roles:
+      - openjdk-8
+      - tomcat8
+      - application
+      

@@ -1,0 +1,44 @@
+---
+- hosts: devserver
+  remote_user: arun
+  become: yes
+  
+  tasks:
+  - debug: msg="it works!"
+
+  - file: 
+      state: directory
+      path: /tmp/tomcat
+      mode: 0755
+   
+  - name: Ensure group "tomcat" exists
+    group:
+      name: tomcat
+      state: present
+  
+  - name: Ensure group "ubuntu" exists
+    group:
+      name: ubuntu
+      state: present
+   
+  - name: Ensure User "tomcat" exists
+    user:
+      name: tomcat
+      state: present
+      group: tomcat        
+
+  - file: 
+      state: directory
+      path: /tmp/tomcat1
+      owner: tomcat
+      group: tomcat
+      mode: 0755  
+
+  - name: add several users
+    user:
+      name: "{{ item.name }}"
+      state: present
+      groups: "{{ item.groups }}"
+    loop:
+      - { name: 'testuser1', groups: 'ubuntu' }
+      - { name: 'testuser2', groups: 'tomcat' }  

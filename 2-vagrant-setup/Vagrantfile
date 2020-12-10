@@ -1,0 +1,66 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+boxes = [
+  {
+    :name => "dev",
+    :box => "ubuntu/xenial64",
+    :ip => '192.168.33.11',
+    :cpu => "20",
+    :ram => "1024",
+    :appport => 8095,
+    :apphttpsport => 8443,
+    :sshport => 2222
+  },
+  {
+    :name => "test",
+    :box => "ubuntu/xenial64",
+    :ip => '192.168.33.12',
+    :cpu => "20",
+    :ram => "1024",
+    :appport => 8090,
+    :apphttpsport => 8453,
+    :sshport => 2223
+  },
+  {
+    :name => "staging",
+    :box => "ubuntu/xenial64",
+    :ip => '192.168.33.13',
+    :cpu => "20",
+    :ram => "1024",
+    :appport => 9095,
+    :apphttpsport => 9553,
+    :sshport => 2224
+  },
+  {
+    :name => "prod",
+    :box => "ubuntu/xenial64",
+    :ip => '192.168.33.14',
+    :cpu => "20",
+    :ram => "1024",
+    :appport => 9090,
+    :apphttpsport => 9453,
+    :sshport => 2225
+  },
+]
+
+
+Vagrant.configure("2") do |config|
+  boxes.each do |box|
+    config.vm.define box[:name] do |vms|
+      vms.vm.box = box[:box]
+      vms.vm.box_url = box[:url]
+
+      vms.vm.provider "virtualbox" do |v|
+        v.customize ["modifyvm", :id, "--cpuexecutioncap", box[:cpu]]
+        v.customize ["modifyvm", :id, "--memory", box[:ram]]
+      end
+
+      vms.vm.network :private_network, ip: box[:ip]
+
+      vms.vm.network :forwarded_port, guest:80, host: box[:appport]
+      vms.vm.network :forwarded_port, guest:443, host: box[:apphttpsport]
+    end  
+  end  
+
+end

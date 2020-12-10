@@ -1,0 +1,15 @@
+---
+  - name: Registering Variable Example
+    hosts: localhost
+    connection: local
+
+    tasks:
+      - name: Capture out of whoami command
+        command: xyz
+        register: login
+        ignore_errors: True
+
+      - name: Print the capture value of whoami 
+        debug: var=login
+
+     

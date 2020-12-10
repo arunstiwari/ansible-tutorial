@@ -1,0 +1,14 @@
+---
+  - name: Basic Variables Example
+    hosts: localhost
+    connection: local
+
+    vars:
+      hostname: 'XYZ'
+
+    tasks: 
+      - name: Debugging Variables
+        debug: var=hostname
+
+      - name: Printing Variable Value
+        debug: msg="Hostname value is {{hostname}}"   

@@ -1,0 +1,47 @@
+FROM alpine:3.7
+
+RUN echo "#### Setting up the environment for the build dependencies ####" && \
+set -x && apk --update add --virtual build-dependencies \
+    gcc musl-dev libffi-dev openssl-dev python-dev
+
+RUN echo "#### Update the OS package index and tools ####" && \
+    apk update && apk upgrade
+
+RUN echo "#### Setting up the build dependecies ####" && \
+   apk add --no-cache bash curl tar openssh-client \
+    sshpass git python py-boto py-dateutil py-httplib2 \
+    py-jinja2 py-paramiko py-pip py-yaml ca-certificates 
+
+RUN echo "#### Installing Python PyPI ####" && \
+    pip install pip==18.1 && \
+    pip install python-keyczar docker-py
+
+RUN echo "#### Installing Ansible latest release and cleaning up ####" && \
+    pip install ansible \
+    apk del build-dependencies && \
+    rm -rf /var/cache/apk/*
+
+RUN echo "#### Initializing Ansible inventory with the localhost ####" && \
+    mkdir -p /etc/ansible/library /etc/ansible/roles /etc/ansible/lib /etc/ansible/ && \
+    echo "localhost" >> /etc/ansible/hosts
+
+ENV HOME                      /home/ansible
+ENV PATH                      /etc/ansible/bin:$PATH
+ENV PYTHONPATH                /etc/ansible/lib
+ENV ANSIBLE_ROLES_PATH        /etc/ansible/roles
+ENV ANSIBLE_LIBRARY           /etc/ansible/library
+ENV ANSIBLE_SSH_PIPELINING                True
+ENV ANSIBLE_GATHERING                     smart
+ENV ANSIBLE_HOST_KEY_CHECKING             false
+ENV ANSIBLE_RETRY_FILES_ENABLED           false 
+
+RUN adduser -h $HOME ansible -D \
+   && chown -R ansible:ansible $HOME
+
+RUN echo "ansible ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers \
+    && chmod 0440 /etc/sudoers
+
+WORKDIR $HOME
+USER ansible
+
+ENTRYPOINT ["ansible"]

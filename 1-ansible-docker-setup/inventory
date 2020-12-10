@@ -1,0 +1,2 @@
+[dev1]
+dev ansible_host=127.0.0.1 ansible_port=2220 ansible_user=ubuntu ansible_private_key=/Users/arun/training/ansible/2-vagrant-setup/.vagrant/machines/default/virtualbox/private_key

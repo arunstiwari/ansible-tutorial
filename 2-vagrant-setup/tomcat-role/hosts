@@ -1,0 +1,11 @@
+[devserver]
+dev ansible_ssh_host=127.0.0.1 ansible_ssh_port=2200 ansible_ssh_user='ubuntu' ansible_ssh_private_key_file=/Users/arun/training/ansible/2-vagrant-setup/.vagrant/machines/dev/virtualbox/private_key
+
+[testserver]
+test ansible_ssh_host=127.0.0.1 ansible_ssh_port=2222 ansible_ssh_user='ubuntu' ansible_ssh_private_key_file=/Users/arun/training/ansible/2-vagrant-setup/.vagrant/machines/test/virtualbox/private_key
+
+[stagingserver]
+staging ansible_ssh_host=127.0.0.1 ansible_ssh_port=2201 ansible_ssh_user='ubuntu' ansible_ssh_private_key_file=/Users/arun/training/ansible/2-vagrant-setup/.vagrant/machines/staging/virtualbox/private_key
+
+[prodserver]
+prod ansible_ssh_host=127.0.0.1 ansible_ssh_port=2202 ansible_ssh_user='ubuntu' ansible_ssh_private_key_file=/Users/arun/training/ansible/2-vagrant-setup/.vagrant/machines/prod/virtualbox/private_key

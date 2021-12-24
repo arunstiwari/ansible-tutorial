@@ -1,2 +1,0 @@
-[devserver]
-172.16.86.129 ansible_ssh_user=arun ansible_ssh_private_key_file=/Users/arun/training/ansible/2-vagrant-setup/basic/ubuntu ansible_sudo_pass=apple

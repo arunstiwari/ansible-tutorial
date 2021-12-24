@@ -1,5 +1,0 @@
----
-- hosts: webservers
-  connection: local
-  tasks:
-  - debug: msg="it works!"

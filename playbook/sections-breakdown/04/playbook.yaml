@@ -4,10 +4,13 @@
   user: root
   gather_facts: False
 
+  vars:
+    motd: Welcome to CentOS Linux - Ansible Rocks (3)
+
   tasks:
     - name: Configure a MOTD (message of the day)
       copy:
-        content: Welcome to CentOS Linux - Ansible Rocks (2)
+        content: "{{ motd }}"
         dest: /etc/motd
 
 ...

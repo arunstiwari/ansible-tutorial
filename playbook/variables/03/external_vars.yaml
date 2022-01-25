@@ -1,0 +1,13 @@
+---
+external_example_key: example value
+
+external_dict:
+  dict_key: This is a dictionary value
+
+external_named_list:
+  - item1
+  - item2
+  - item3
+  - item4
+
+...

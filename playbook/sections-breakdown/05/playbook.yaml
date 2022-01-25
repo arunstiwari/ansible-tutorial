@@ -1,0 +1,23 @@
+---
+-
+  hosts: centos
+  user: root
+  gather_facts: False
+
+  vars:
+    motd: Welcome to CentOS Linux - Ansible Rocks (3)
+
+  tasks:
+    - name: Configure a MOTD (message of the day)
+      copy:
+        content: "{{ motd }}"
+        dest: /etc/motd
+      notify: MOTD changed
+
+  # Handlers: the list of handlers that are executed as a notify key from a task
+  handlers:
+    - name: MOTD changed
+      debug:
+        msg: The MOTD changed
+
+...

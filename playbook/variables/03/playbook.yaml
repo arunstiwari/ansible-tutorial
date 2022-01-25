@@ -1,0 +1,27 @@
+---
+- hosts: centos1
+  user: root
+  gather_facts: False
+
+  vars_files:
+    - external_vars.yaml
+
+
+  tasks:
+    - name: Test named variable
+      debug:
+        msg: "{{ external_example_key }}"
+
+    - name: Test named dictionary
+      debug:
+        msg: "{{ external_dict }}"
+
+    - name: Test named list
+      debug:
+        msg: "{{ external_named_list }}"
+
+    - name: Test named list with dot notation
+      debug:
+        msg: "{{ external_named_list.0}}"
+
+...

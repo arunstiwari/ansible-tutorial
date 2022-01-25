@@ -1,0 +1,41 @@
+---
+- hosts: centos1
+  user: root
+  gather_facts: False
+
+  vars:
+    message: Welcome to CentOS Linux - Ansible Rocks
+    dict:
+      dict_key: This is a dictionary value
+    named_list:
+      - item1
+      - item2
+      - item3
+      - item4
+
+  tasks:
+    - name: Test named variable
+      debug:
+        msg: "{{ message }}"
+
+    - name: Test named dictionary
+      debug:
+        msg: "{{ dict }}"
+
+    - name: Test named dictionary key value with dot notation
+      debug:
+        msg: "{{ dict.dict_key }}"
+
+    - name: Test named dictionary key value with python bracket notation
+      debug:
+        msg: "{{ dict['dict_key'] }}"
+
+    - name: Test named list
+      debug:
+        msg: "{{ named_list }}"
+
+    - name: Test named list with dot notation
+      debug:
+        msg: "{{ named_list.0}}"
+
+...

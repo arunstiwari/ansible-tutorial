@@ -1,0 +1,18 @@
+---
+- name: demo the template
+  hosts: localhost
+  gather_facts: false
+  vars:
+    data_dirs: ['/', '/foo', '/bar']
+  tasks:
+    - name: without condition
+      ansible.builtin.pause:
+        prompt: "{{ lookup('template', 'demo-1-without-condition.j2') }}"
+
+    - name: with condition
+      ansible.builtin.pause:
+        prompt: "{{ lookup('template', 'demo-2-with-if.j2')}}"
+
+    - name: with condition inlined
+          ansible.builtin.pause:
+            prompt: "{{ lookup('template', 'demo-2-with-if-inlined.j2')}}"

@@ -1,0 +1,45 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars:
+    docker_volume: db_data
+    docker_network: userservice_net
+    DATABASE_USER: postgres
+    DATABASE_PASSWORD: docker
+    APP_SERVER_PORT: 8080
+    APP_CONTAINER_PORT:8080
+    DB_CONTAINER_NAME: db
+    APPLICATION_IMAGE: arunstiwari/userservice
+    APPLICATION_IMAGE_VERSION:2.0
+
+  tasks:
+    - name: "Create a volume"
+      docker_volume:
+         name: "{{docker_volume}}"
+
+    - name: "Create a network"
+      docker_network:
+         name: "{{docker_network}}"
+
+    - name: "Launch database container"
+      docker_container:
+         name: "{{DB_CONTAINER_NAME}}"
+         image: "postgres:13.1-alpine"
+         volumes:
+           - "{{docker_volume}}:/var/lib/postgresql/data/"
+         environment:
+               - POSTGRES_USER={{DATABASE_USER}}
+               - POSTGRES_PASSWORD={{DATABASE_PASSWORD}}
+
+    - name: "Launch Application container"
+      docker_container:
+         image: {{ APPLICATION_IMAGE }}:{{ APPLICATION_IMAGE_VERSION}}
+         container_name: {{APPLICATION_CONTAINER_NAME}}
+         ports:
+           - 9080:8080
+         environment:
+           - SPRING_DATASOURCE_URL=jdbc:postgresql://{{DB_CONTAINER_NAME}}:5432/postgres
+           - SPRING_DATASOURCE_USERNAME={{DATABASE_USER}}
+           - SPRING_DATASOURCE_PASSWORD={{DATABASE_PASSWORD}}
+           - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+           - SPRING_SERVER_PORT={{APPLICATION_SERVER_PORT}}
